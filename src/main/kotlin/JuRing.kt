@@ -1,18 +1,14 @@
 package cc.yaeko
 
-import cc.yaeko.iw233.manager.RandomImageManager
+import cc.yaeko.command.CommandHandle
+import cc.yaeko.command.CommandManager
 import cc.yaeko.newbing.Chat
-import cc.yaeko.newbing.Config
-import cc.yaeko.newbing.manager.ConversationManager
-import cc.yaeko.util.Function.toJson
+import cc.yaeko.util.ClassUtil
 import com.google.gson.Gson
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
-import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.message.data.At
-import net.mamoe.mirai.message.data.MessageChainBuilder
 
 object JuRing : KotlinPlugin(
         JvmPluginDescription(
@@ -27,9 +23,7 @@ object JuRing : KotlinPlugin(
     val gson = Gson()
 
     override fun onEnable() {
-        
-
-        GlobalEventChannel.subscribeAlways<GroupMessageEvent> {
+        /*GlobalEventChannel.subscribeAlways<GroupMessageEvent> {
             val message = it.message.contentToString()
             if (message.contains("#开始新对话")){
                 Chat.closeConversationByUser(it.sender)
@@ -61,6 +55,19 @@ object JuRing : KotlinPlugin(
                 if (it.message.contentToString().contains("@${cc.yaeko.Config.botQQ}"))
                     Chat.sendMessage(it)
             }
+        }*/
+
+        ClassUtil.init(jvmPluginClasspath)
+        CommandManager.init()
+
+        GlobalEventChannel.subscribeAlways<GroupMessageEvent> {
+            if (CommandHandle.checkIsCommandMessage(it.message)){
+
+            } else if (it.message.contentToString().contains("@${cc.yaeko.Config.botQQ}"))
+                Chat.sendMessage(it)
         }
+
+
+
     }
 }

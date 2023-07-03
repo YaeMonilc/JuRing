@@ -7,7 +7,6 @@ import net.mamoe.mirai.event.events.GroupMessageEvent
 import newbing.ChatWebSocket
 import java.net.InetSocketAddress
 import java.net.Proxy
-import kotlin.concurrent.thread
 
 object Chat {
     private val userConversation : MutableMap<User, Conversation> = mutableMapOf()

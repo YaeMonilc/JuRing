@@ -3,7 +3,6 @@ package cc.yaeko.util
 import cc.yaeko.newbing.Config
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
 import java.io.InputStream
 import java.net.InetSocketAddress
 import java.net.Proxy
