@@ -61,6 +61,49 @@ class Raffle : Command {
     }
 
     override suspend fun handle(messageEvent: FriendMessageEvent, args: List<String>) {
+        val userData = UserDataManager.getData(messageEvent.sender.id)
+        var messageChain = MessageChainBuilder()
+            .append(At(messageEvent.sender))
+            .append(" ").append("\n")
+            .append("---------提示---------").append("\n")
+            .append("   ").append("是否消耗💵x50抽奖").append("\n")
+            .append("----------------------").append("\n")
+            .append("          ").append("YES").append("      ").append("NO")
+            .build()
+        messageEvent.friend.sendMessage(messageChain)
 
+        val event = Event(messageEvent.friend.id)
+        EventManager.registerEvent(event, messageEvent.sender.id)
+        val input = event.subscribe(10000)
+        if (input.isNullOrEmpty()) {
+            messageChain = MessageChainBuilder()
+                .append(At(messageEvent.sender))
+                .append(" ")
+                .append("超时无响应,已取消")
+                .build()
+            messageEvent.friend.sendMessage(messageChain)
+            return
+        }
+        when(input.contentToString()) {
+            "YES" -> {
+                val money = (0..500).random()
+                userData.money += money - 50
+                UserDataManager.save(userData)
+                messageChain = MessageChainBuilder()
+                    .append(At(messageEvent.sender))
+                    .append(" ")
+                    .append("获得: ").append("💵x$money")
+                    .build()
+                messageEvent.friend.sendMessage(messageChain)
+            }
+            "NO" -> {
+                messageChain = MessageChainBuilder()
+                    .append(At(messageEvent.sender))
+                    .append(" ")
+                    .append("已取消")
+                    .build()
+                messageEvent.friend.sendMessage(messageChain)
+            }
+        }
     }
 }

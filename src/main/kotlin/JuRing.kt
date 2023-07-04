@@ -32,6 +32,10 @@ object JuRing : KotlinPlugin(
         GlobalEventChannel.subscribeAlways<FriendMessageEvent> {
             if (CommandManager.checkIsCommandMessage(it.message)){
                 CommandHandle.runCommand(it)
+            }else if (EventManager.checkEvent(it.sender.id, it.sender.id)){
+                val event = EventManager.getEvent(it.sender.id, it.sender.id) ?: return@subscribeAlways
+                event.response(it.message)
+                EventManager.eventComplete(it.sender.id)
             }
         }
 
