@@ -86,13 +86,16 @@ class ChatWebSocket(
                 messageRecord.add(JuRing.gson.fromJson(msg, ResponseMessageB::class.java))
                 return
             }
+            3 -> {
+                return
+            }
             2 -> {
                 text = JuRing.gson.fromJson(msg, ResponseMessageA::class.java).item.messages.stream().filter {
                     it.author == "bot"
                 }.collect(Collectors.toList()).last().text
             }
             7 -> {
-                text = messageRecord.get(messageRecord.size - 1).arguments[0].messages[0].text
+                text = messageRecord[messageRecord.size - 1].arguments[0].messages[0].text
             }
         }
 
@@ -104,8 +107,10 @@ class ChatWebSocket(
         }
         GlobalScope.launch {
             JuRing.logger.info(text)
-            groupMessageEvent.group.sendMessage(text)
-            complete()
+            if (text != ""){
+                groupMessageEvent.group.sendMessage(text)
+                complete()
+            }
         }
     }
 
