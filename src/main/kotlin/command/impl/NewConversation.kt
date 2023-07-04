@@ -1,5 +1,6 @@
-package command.impl
+package cc.yaeko.command.impl
 
+import cc.yaeko.JuRing
 import cc.yaeko.newbing.Chat
 import command.Command
 import command.CommandSetting
@@ -12,14 +13,13 @@ import net.mamoe.mirai.message.data.MessageChainBuilder
 class NewConversation : Command {
     override suspend fun handle(messageEvent: GroupMessageEvent, args: List<String>) {
         val messageChainBuilder = MessageChainBuilder()
-
         Chat.closeConversationByUser(messageEvent.sender)
         Chat.openNewConversation(messageEvent.sender)
 
         messageChainBuilder.append(At(messageEvent.sender))
         messageChainBuilder.append(" ")
         messageChainBuilder.append("已清空对话")
-        messageEvent.sender.sendMessage(messageChainBuilder.build())
+        messageEvent.group.sendMessage(messageChainBuilder.build())
     }
 
     override suspend fun handle(messageEvent: FriendMessageEvent, args: List<String>) {
