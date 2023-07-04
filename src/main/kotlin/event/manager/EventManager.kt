@@ -42,11 +42,11 @@ object EventManager {
         eventAll[id] = events.slice(0..events.size - 2).toMutableList()
     }
 
-    fun registerEvent(event: Event, groupMessageEvent: GroupMessageEvent) {
-        if (!eventAll.contains(groupMessageEvent.sender.id)){
-            eventAll[groupMessageEvent.sender.id] = mutableListOf()
+    fun registerEvent(event: Event, id: Long) {
+        if (!eventAll.contains(id)){
+            eventAll[id] = mutableListOf()
         }
-        eventAll[groupMessageEvent.sender.id]!!.add(event)
+        eventAll[id]!!.add(event)
     }
 
 }

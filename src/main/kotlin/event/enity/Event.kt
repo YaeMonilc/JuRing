@@ -1,5 +1,7 @@
 package cc.yaeko.event.enity
 
+import cc.yaeko.JuRing
+import cc.yaeko.event.manager.EventManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
@@ -17,7 +19,11 @@ class Event(
             }
             return@runBlocking
         }
-        return if (value == "") null else value
+        if (time >= timeout) {
+            EventManager.eventComplete(groupId)
+            return null
+        }
+        return value
     }
 
     fun response(value : String) {
