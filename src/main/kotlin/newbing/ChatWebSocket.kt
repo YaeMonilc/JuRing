@@ -98,9 +98,14 @@ class ChatWebSocket(
                 return
             }
             2 -> {
-                text = JuRing.gson.fromJson(msg, ResponseMessageA::class.java).item.messages.stream().filter {
+                val collect = JuRing.gson.fromJson(msg, ResponseMessageA::class.java).item.messages.stream().filter {
                     it.author == "bot"
-                }.collect(Collectors.toList()).last().text
+                }.collect(Collectors.toList())
+                if (collect.isEmpty()) {
+                    return
+                }
+                text = collect.last().text
+
             }
             7 -> {
                 text = messageRecord[messageRecord.size - 1].arguments[0].messages[0].text
