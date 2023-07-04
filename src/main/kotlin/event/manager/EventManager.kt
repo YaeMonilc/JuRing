@@ -6,22 +6,22 @@ import net.mamoe.mirai.event.events.GroupMessageEvent
 object EventManager {
     private val eventAll : MutableMap<Long, MutableList<Event>> = mutableMapOf()
 
-    fun checkEvent(id : Long) : Boolean{
+    fun checkEvent(id : Long, classifyId : Long) : Boolean{
         if (!eventAll.contains(id)){
             return false
         }
         val events = eventAll[id]!!.filter {
-            it.groupId == id
+            it.classifyId == classifyId
         }
         return events.isNotEmpty()
     }
 
-    fun getEvent(id : Long) : Event? {
+    fun getEvent(id : Long, classifyId: Long) : Event? {
         if (!eventAll.contains(id)){
             return null
         }
         val events = eventAll[id]!!.filter {
-            it.groupId == id
+            it.classifyId == classifyId
         }
         if (events.isEmpty()){
             return null
@@ -34,7 +34,7 @@ object EventManager {
             return
         }
         val events = eventAll[id]!!.filter {
-            it.groupId == id
+            it.classifyId == id
         }
         if (events.isEmpty()){
             return
@@ -44,7 +44,8 @@ object EventManager {
 
     fun registerEvent(event: Event, id: Long) {
         if (!eventAll.contains(id)){
-            eventAll[id] = mutableListOf()
+            eventAll[id] = mutableListOf(event)
+            return
         }
         eventAll[id]!!.add(event)
     }

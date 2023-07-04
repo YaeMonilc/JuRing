@@ -17,8 +17,8 @@ class NewConversation : Command {
         Chat.openNewConversation(messageEvent.sender)
 
         messageChainBuilder.append(At(messageEvent.sender))
-        messageChainBuilder.append(" ")
-        messageChainBuilder.append("已清空对话")
+            .append(" ")
+            .append("已清空对话")
         messageEvent.group.sendMessage(messageChainBuilder.build())
     }
 

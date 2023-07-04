@@ -14,8 +14,8 @@ class ConversationCount : Command {
     override suspend fun handle(messageEvent: GroupMessageEvent, args: List<String>) {
         val messageChainBuilder = MessageChainBuilder()
         messageChainBuilder.append(At(messageEvent.sender))
-        messageChainBuilder.append(" ")
-        messageChainBuilder.append("次数：")
+            .append(" ")
+            .append("次数：")
         val conversation = Chat.getConversationByUser(messageEvent.sender)
         messageChainBuilder.append(conversation?.times?.toString() ?: "0")
         messageEvent.group.sendMessage(messageChainBuilder.build())

@@ -40,12 +40,11 @@ object JuRing : KotlinPlugin(
                 CommandHandle.runCommand(it)
             } else if (it.message.contentToString().contains("@${Config.botQQ}"))
                 Chat.sendMessage(it)
-            else if (EventManager.checkEvent(it.sender.id)){
-                val event = EventManager.getEvent(it.sender.id) ?: return@subscribeAlways
-                event.response(it.message.contentToString())
+            else if (EventManager.checkEvent(it.sender.id, it.group.id)){
+                val event = EventManager.getEvent(it.sender.id, it.group.id) ?: return@subscribeAlways
+                event.response(it.message)
                 EventManager.eventComplete(it.sender.id)
             }
-
         }
     }
 }
