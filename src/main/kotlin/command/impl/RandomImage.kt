@@ -1,20 +1,20 @@
 package cc.yaeko.command.impl
 
+import cc.yaeko.iw233.manager.RandomImageManager
 import command.Command
 import command.CommandSetting
+import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.event.events.GroupMessageEvent
 
-@CommandSetting(commandName = "测试命令", commandInfo = "测试用", args = 1, argsInfo = "<不知道有啥用>", enable = true, master = true)
-class TestCommand : Command {
+@CommandSetting(commandName = "随机图片", commandInfo = "获取随机图片", enable = true)
+class RandomImage : Command{
     override suspend fun handle(messageEvent: GroupMessageEvent, args: List<String>) {
-        args.forEach {
-            messageEvent.group.sendMessage(it)
-        }
+        messageEvent.group.sendImage(RandomImageManager.random()!!)
     }
 
     override suspend fun handle(messageEvent: FriendMessageEvent, args: List<String>) {
-
+        messageEvent.sender.sendImage(RandomImageManager.random()!!)
     }
 
 }

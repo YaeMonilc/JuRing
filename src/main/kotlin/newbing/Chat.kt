@@ -3,6 +3,7 @@ package cc.yaeko.newbing
 import cc.yaeko.newbing.entity.Conversation
 import cc.yaeko.newbing.manager.ConversationManager
 import net.mamoe.mirai.contact.User
+import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import newbing.ChatWebSocket
 import java.net.InetSocketAddress
@@ -17,7 +18,7 @@ object Chat {
         return conversation
     }
 
-    fun getConversationByUser(user: User) : Conversation = userConversation[user]!!
+    fun getConversationByUser(user: User) : Conversation? = userConversation[user]
 
     fun closeConversationByUser(user: User) = userConversation.remove(user)
 
@@ -29,7 +30,7 @@ object Chat {
         if (!isConversationExists(user)){
             openNewConversation(user)
         }else {
-            getConversationByUser(user)
+            getConversationByUser(user)!!
         }
         val chatWebSocket = ChatWebSocket(groupMessageEvent, conversation)
         chatWebSocket.setProxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("192.168.43.1", 7890)));
