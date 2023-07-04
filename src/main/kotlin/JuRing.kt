@@ -2,6 +2,7 @@ package cc.yaeko
 
 import cc.yaeko.command.CommandHandle
 import cc.yaeko.command.CommandManager
+import cc.yaeko.event.manager.EventManager
 import cc.yaeko.newbing.Chat
 import cc.yaeko.util.ClassUtil
 import com.google.gson.Gson
@@ -39,6 +40,12 @@ object JuRing : KotlinPlugin(
                 CommandHandle.runCommand(it)
             } else if (it.message.contentToString().contains("@${Config.botQQ}"))
                 Chat.sendMessage(it)
+            else if (EventManager.checkEvent(it.sender.id)){
+                val event = EventManager.getEvent(it.sender.id) ?: return@subscribeAlways
+                event.response(it.message.contentToString())
+                EventManager.eventComplete(it.sender.id)
+            }
+
         }
     }
 }
