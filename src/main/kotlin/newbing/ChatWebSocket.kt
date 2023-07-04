@@ -83,8 +83,16 @@ class ChatWebSocket(
         when(JuRing.gson.fromJson(msg, CodeMessage::class.java).type) {
             1 -> {
                 JuRing.logger.info("Get Response")
-                messageRecord.add(JuRing.gson.fromJson(msg, ResponseMessageB::class.java))
-                return
+                val json = JuRing.gson.fromJson(msg, ResponseMessageB::class.java)
+                if (!json.arguments[0].messages.isNullOrEmpty()) {
+                    messageRecord.add(json)
+                    if (json.arguments[0].messages[0].text.contains("对不起，我不想继续这个对话。我还在学习，所以我感谢你的理解和耐心。")) {
+                        text = json.arguments[0].messages[0].text
+                        complete()
+                    }else{
+                        return
+                    }
+                }
             }
             3 -> {
                 return
@@ -138,5 +146,4 @@ class ChatWebSocket(
         complete = true
         close()
     }
-
 }
